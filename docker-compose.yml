@@ -1,0 +1,33 @@
+version: '3'
+networks: 
+    app:
+    database:
+volumes:
+    database:
+services:
+    db:
+        image: mysql:5.7
+        restart: always
+        environment: 
+            MYSQL_DATABASE: 'db'
+            MYSQL_USER: 'user'
+            MYSQL_ROOT_PASSWORD: 'password'
+        ports:
+            - 3306:3306
+        volumes:
+            - database:/var/lib/mysql
+        networks: 
+            - database
+    backend:
+        image: node:12-stretch-slim
+        volumes:
+            - ./backend:/backend
+        ports:
+            - 3000:3000
+        working_dir: /backend
+        command: bash ./boot.sh
+        networks: 
+            - database
+            - app
+        depends_on: 
+            - db
