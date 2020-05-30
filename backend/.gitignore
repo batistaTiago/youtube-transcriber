@@ -1,2 +1,4 @@
 node_modules
 speech-to-text-demo-keys.json
+*.mp4
+*.mp3
