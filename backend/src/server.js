@@ -123,11 +123,10 @@ server.post('/transcribe-file', async(req, res) => {
         }
 
         const downloader = new BTVideoDownloader(req.body.url);
-        const video = await downloader.downloadAudioChannel();
+        const audioChannel = await downloader.downloadAudioChannel();
 
         const transcriber = new BTAudioTranscriber();
-
-        const transcriptionResult = await transcriber.transcribeAudio(video.fileName);
+        const transcriptionResult = await transcriber.transcribeAudio(audioChannel.fileName);
 
         return res.json({
             success: true,

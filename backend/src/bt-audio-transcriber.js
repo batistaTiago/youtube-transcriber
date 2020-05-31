@@ -14,10 +14,9 @@ class BTAudioTranscriber {
 
     transcribeAudio = async(filename) => {
 
-
-        const filePath = path.resolve(`${__dirname}/../${filename}`);
-        const encoding = 'LINEAR16';
-        const sampleRateHertz = 16000;
+        const filePath = path.resolve(__dirname + '/../' + filename);
+        const encoding = 'MP3';
+        const sampleRateHertz = 44100;
 
         const config = {
             encoding: encoding,
@@ -26,10 +25,14 @@ class BTAudioTranscriber {
         };
 
         const audio = {
-            content: fs.readFileSync('/backend/' + filename).toString('base64'),
+            content: fs.readFileSync(filename, { encoding: 'base64' })
         };
 
-        console.log(audio);
+        return {
+            audio,
+            filename,
+            filePath
+        };
 
         const request = {
             config: config,
@@ -45,13 +48,11 @@ class BTAudioTranscriber {
 
         let transcription = '';
 
-        return response.results
+        response.results.forEach(result => {
+            transcription += result.alternatives[0].transcript
+        })
 
-        // foreach(result => {
-        //     transcription += result.alternatives[0].transcript
-        // })
-
-        console.log(`Transcription: ${transcription}`);
+        console.log(`\n\n\n\n\n\nTranscription: ${transcription}\n\n\n\n\n\n`);
 
         return transcription;
     }
